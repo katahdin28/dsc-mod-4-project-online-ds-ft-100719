@@ -1,100 +1,37 @@
 
 # Module 4 -  Final Project Specifications
 
-## Introduction
+Goal: Identify 5 zip codes for maximum investment returns in the San Francisco Bay Area
 
-In this lesson, we'll review all the guidelines and specifications for the final project for Module 4.
+Results:
+We have identified 5+ zip codes in the San Francisco Bay Area that have the highest predicted percentage housing price growth over the nest two years. The analysis is based on more than 20 years of housing price index data from Zillow's research team, and relies on an ARIMA regression to forecast housing prices into future months.
 
-## Objectives
+We have defined out outcome of interest as the expected value growth percentage in real estate prices for the zipcode.  This metric means that for a given amount of invested dollars, maximizing growth as a percentage of current home price index should return the highest ROIC. However, we will also evaluate downside risk and present it, but will need additional input from the client on their risk aversity.
 
-* Understand all required aspects of the Final Project for Module 4
-* Understand all required deliverables
-* Understand what constitutes a successful project
+A summary of the selected zip codes is below:
 
-### Final Project Summary
+Zipcode	Forecast 2-Yr Growth	97.5% Lower-Bound 2-Yr Forecast
+94572	47 %	-4 %
+94043	39 %	17 %
+95035	38 %	8 %
+94089	31 %	5 %
+94063	30 %	1 %
+94087	28 %	6 %
 
-Another module down--you're absolutely crushing it! For this project, you'll get to flex your **_Time-Series_** muscles!
+Furthermore, we have reviewed a key indicator of buyer/supplier demand ratios using another Zillow-produced metric, the Buyer-Seller Index (BSI), for the two zipcodes within our top 10 highest-growth forecast list. For both of these, the BSI has approximately tracked housing price growth rates over the last 8 years, and for both, the BSI value is at a historical high point currently (8-10 on a scale of 0 to 10). This point supports our analysis based solely on historical price patterns.
 
-<img src='https://raw.githubusercontent.com/learn-co-curriculum/dsc-mod-4-project/master/images/timegif.gif'>
+We also want to be sensitive to potential downside risk - and as such have included a metric on the lower-bound of the projected housing price growth based on our ARIMA forecast model. For all except the top-growth zipcode, the lower-bound price growth is still positive, and as much as 40% of the expected value growth rate. However, our top-forecast growth zipcode has a slightly negative lower-bound rate, representing more than a 50% swing in housing price. This appears to be a high-variance housing price region, and the client may want to deprioritze this region in favor of lower-variance, also high-growth forecast regions.
 
-For this module's final project, we're going to put your newfound **_Time Series Analysis_** skills to the test. You will be forecasting real estate prices of various zipcodes using data from [Zillow](https://www.zillow.com/research/data/). However, this won't be as straightforward as just running a time-series analysis--you're going to have to make some data-driven decisions and think critically along the way!
+One of the primary reasons growth rates are so high for these zipcodes is that the starting average home price value in these zipcodes is low to begin with. Therefore, relatively smaller price increases compared to other zipcodes are resulting in higher percentage growth. This is fine, as our client is looking to maximize growth on a per-dollar basis, rather than a per-unit basis. Based on a survey of the zipcodes, these are smaller, more coastal, non-central areas near either Palo Alto, Berkeley, or other major metro centers that may be finally being more fully penetrated by high-income residents. It may be worth looking into whether there are any idiosyncratic charactaristics of these areas that might imply a price ceiling (e.g waste treatment plants, street accessibility issues, etc.
 
-### The Project
+A limitation of the identified zipcodes is that these are smaller regions, often less than half the size or even a fifth the size of the median zipcode in the region. Therefore, the investment team may need to move further down the list of prioritized regions to find enough potential acquisition targets.
 
-For this project, you will be acting as a consultant for a fictional real-estate investment firm. The firm has asked you what seems like a simple question:
+Finally - an important caveat is that our ARIMA model forecasting is highly sensitive to relatively recent upturns or downturns within the last few months of data. We have trained the model on 20+ years of data, which for many zip codes includes several moderate drops or spikes in housing prices (especially circa 2006-2010). A second caveat is that housing prices were very sensitive to a market-wide housing price bubble deflation in the late 00's, and any investor shoudl be concerned about the possibility of a price deflation event that is not predictable from the existing data. However, future work should include pressure-testing each 2-year prediction on data that ends 2-10 months prior to the actual end of data to test for sensitivity to end-of-period trends.
 
-> what are the top 5 best zipcodes for us to invest in?
+## Key Methods
 
-This may seem like a simple question at first glance, but there's more than a little ambiguity here that you'll have to think through in order to provide a solid recommendation. Should your recommendation be focused on profit margins only? What about risk? What sort of time horizon are you predicting against?  Your recommendation will need to detail your rationale and answer any sort of lingering questions like these in order to demonstrate how you define "best".
+* ARIMA model from statsmodels.tsa.arima_model
 
-As mentioned previously, the data you'll be working with comes from the [Zillow Research Page](https://www.zillow.com/research/data/). However, there are many options on that page, and making sure you have exactly what you need can be a bit confusing. For simplicity's sake, we have already provided the dataset for you in this repo--you will find it in the file `zillow_data.csv`.
+### The Data
 
-## The Deliverables
-
-The goal of this project is to have you complete a very common real-world task in regard to Time-Series Modeling. However, real world problems often come with a significant degree of ambiguity, which requires you to use your knowledge of statistics and data science to think critically about and answer. While the main task in this project is Time-Series Modeling, that isn't the overall goal--it is important to understand that Time-Series Modeling is a tool in your toolbox, and the forecasts it provides you are what you'll use to answer important questions.
-
-In short, to pass this project, demonstrating the quality and thoughtfulness of your overall recommendation is at least as important as successfully building a Time-Series model!
-
-Online students should complete the following 4 deliverables for this project:
-
-* A well-documented **_Jupyter Notebook_** containing any code you've written for this project (use the notebook in this repo, `mod_4_starter_notebook.ipynb`). This work will need to be pushed to your GitHub repository in order to submit your project.
-* An organized **README.md** file in the GitHub repository that describes the contents of the repository. This file should be the source of information for navigating through the repository.
-* A **_[Blog post](https://github.com/learn-co-curriculum/dsc-welcome-blogging)_**.
-* An **_'Executive Summary' PowerPoint Presentation_** that explains your rationale and methodology for determining the best zipcodes for investment.
-
-Note: On-campus students may have different deliverables, please speak with your instructor.
-
-### Jupyter Notebook Must-Haves
-
-For this project, you will be provided with a jupyter notebook containing some starter code. If you inspect the zillow dataset file, you'll notice that the datetimes for each sale are the actual column names--this is a format you probably haven't seen before. To ensure that you're not blocked by preprocessing, we've provided some helper functions to help simplify getting the data into the correct format. You're not required to use this notebook or keep it in its current format, but we strongly recommend you consider making use of the helper functions so you can spend your time working on the parts of the project that matter.
-
-#### Organization/Code Cleanliness
-
-The notebook should be well organized, easy to follow, and code is modularized and commented where appropriate.
-
-* Level Up: The notebook contains well-formatted, professional looking markdown cells explaining any substantial code. All functions have docstrings that act as professional-quality documentation.
-* The notebook is written to technical audiences with a way to both understand your approach and reproduce your results. The target audience for this deliverable is other data scientists looking to validate your findings.
-* Data visualizations you create should be clearly labeled and contextualized--that is, they fit with the surrounding code or problems you're trying to solve. No dropping data visualizations randomly around your notebook without any context!
-
-#### Findings
-
-Your notebook should briefly mention the metrics you have defined as "best", so that any readers understand what technical metrics you are trying to optimize for (for instance, risk vs profitability, ROI yield, etc.). You do **not** need to explain or defend your your choices in the notebook--the blog post and executive summary presentation are both better suited to that sort of content. However, the notebook should provide enough context about your definition for "best investment" so that they understand what the code you are writing is trying to solve.
-
-#### Visualizations
-
-Time-Series Analysis is an area of data science that lends itself well to intuitive data visualizations. Whereas we may not be able to visualize the best choice in a classification or clustering problem with a high-dimensional dataset, that isn't an issue with Time Series data. As such, **_any findings worth mentioning in this problem are probably also worth visualizing_**. Your notebook should make use of data visualizations as appropriate to make your findings obvious to any readers.
-
-Also, remember that if a visualization is worth creating, then it's also worth taking the extra few minutes to make sure that it is easily understandable and well-formatted. When creating visualizations, make sure that they have:
-
-* A title
-* Clearly labeled X and Y axes, with appropriate scale for each
-* A legend, when necessary
-* No overlapping text that makes it hard to read
-* An intelligent use of color--multiple lines should have different colors and/or symbols to make them easily differentiable to the eye
-* An appropriate amount of information--avoid creating graphs that are "too busy"--for instance, don't create a line graph with 25 different lines on it
-
-<center><img src='images/bad-graph-1.png' height=100% width=100%>
-There's just too much going on in this graph for it to be readable--don't make the same mistake! (<a href='http://genywealth.com/wp-content/uploads/2010/03/line-graph.php_.png'>Source</a>)</center>
-
-### Blog Post Must-Haves
-
-Refer back to the [Blogging Guidelines](https://github.com/learn-co-curriculum/dsc-welcome-blogging) for the technical requirements and blog ideas.
-
-
-### Executive Summary Must-Haves
-
-Your presentation should:
-
-Contain between 5-10 professional quality slides detailing:
-
-* A high-level overview of your methodology and findings, including the 5 zipcodes you recommend investing in
-* A brief explanation of what metrics you defined as "best" in order complete this project
-
-As always, this prresentation should also:
-
-* Take no more than 5 minutes to present
-* Avoid technical jargon and explain results in a clear, actionable way for non-technical audiences.
-
-## Grading Rubric 
-
-Online students can find a PDF of the grading rubric for the project [here](https://github.com/learn-co-curriculum/dsc-mod-4-project/blob/master/module4_project_rubric.pdf). _Note: On-campus students may have different requirements, please speak with your instructor._
+Our dataset comes from the [Zillow Research Page](https://www.zillow.com/research/data/). I have also used Zillow's zipcode-level Buyer Seller Index (Cross-Geography) as an alternative demand indicator.
